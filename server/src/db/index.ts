@@ -2,6 +2,7 @@ import logger from 'jet-logger';
 import { Client, QueryResult } from 'pg';
 import dotenv from 'dotenv';
 import { usersQueries } from './users';
+import { authTokensQueries } from './authTokens';
 dotenv.config();
 
 const client = new Client(process.env.DB_CONN_STRING);
@@ -34,8 +35,12 @@ const query = async (text: string, params?: any[], callback?: (err: Error, resul
 // Users queries
 const { addUser, getUserByLoginOrEmail } = usersQueries(client);
 
+// Auth_tokens queries
+const { addAuthToken } = authTokensQueries(client);
+
 export default {
   query,
   getUserByLoginOrEmail,
   addUser,
+  addAuthToken,
 };

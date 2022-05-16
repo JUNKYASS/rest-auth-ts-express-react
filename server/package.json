@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "ts-node-dev --respawn src/server.ts",
-    "ps_types_gen": "npx kanel",
+    "pg_types_gen": "npx kanel",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -22,6 +22,7 @@
     "http-status-codes": "^2.2.0",
     "jet-logger": "^1.1.5",
     "jsonwebtoken": "^8.5.1",
+    "nodemailer": "^6.7.5",
     "pg": "^8.7.3",
     "react-router": "^6.3.0",
     "react-router-dom": "^6.3.0",
@@ -33,6 +34,7 @@
     "@types/cookie-parser": "^1.4.3",
     "@types/express": "^4.17.13",
     "@types/jsonwebtoken": "^8.5.8",
+    "@types/nodemailer": "^6.4.4",
     "@types/uuid": "^8.3.4",
     "kanel": "^2.4.4",
     "typescript": "^4.6.4"

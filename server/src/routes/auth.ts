@@ -9,6 +9,7 @@ dotenv.config();
 import db from '../db';
 import { registrationValidators, loginValidators } from '../utils/validators';
 import jwtUtil from '../utils/jwt';
+import emailUtil from '../utils/email';
 
 const router = Router();
 
@@ -60,25 +61,40 @@ router.post('/registration', registrationValidators, async (req: Request, res: R
   try {
     const { login, password, email, is_admin } = req.body;
 
-    if (!(login && password && email && is_admin)) return res.status(BAD_REQUEST).json({ message: 'You must specify all the values', auth: false });
+    if (!(login && password && email && typeof is_admin === 'boolean')) return res.status(BAD_REQUEST).json({ message: 'You must specify all the values', reg: false });
 
     const errors = await validationResult(req);
 
-    if (!errors.isEmpty()) return res.status(BAD_REQUEST).json({ message: `Registration is not completed. ${errors.array()[0].msg}`, err: errors.array() });
+    if (!errors.isEmpty()) return res.status(BAD_REQUEST).json({ message: `Registration is not completed. ${errors.array()[0].msg}`, err: errors.array(), reg: false });
 
     const hashedPass = await bcrypt.hash(password, 3);
-    const activation_link = uuid();
+    const activation_id = uuid();
 
-    await db.addUser({ login, password: hashedPass, email, is_admin, activation_link }, (err, result) => {
-      if (err) return res.status(BAD_REQUEST).json({ message: 'Registration is not completed', err });
-
-
-
-      if (result) return res.status(OK).json({ message: 'Registration successful!', result });
+    const insertedData = await db.addUser({ login, password: hashedPass, email, is_admin, activation_id }, async (err) => {
+      if (err) return res.status(BAD_REQUEST).json({ message: 'Registration is not completed', err, reg: false });
     });
+
+    const user = insertedData?.rows[0];
+    if (!user) return res.status(BAD_REQUEST).json({ message: 'Registration is not completed', reg: false });
+
+    delete (user as any).password;
+
+    const jwt = await jwtUtil.sign({ ...user }); // Get jwt
+    await db.addAuthToken({ token: jwt, user_id: user.id });
+
+    const activationLink = `${process.env.SERVER_URL}/api/auth/activation/${activation_id}`;
+    const result = await emailUtil.sendAccountActivationLink(user.email, activationLink);
+
+    if (result?.error) return res.status(BAD_REQUEST).json({ message: 'Registration is not completed', err: result.error, reg: false });
+
+    return res.status(OK).json({ message: 'Registration successful!', result, reg: true });
   } catch (err) {
-    return res.status(BAD_REQUEST).json({ message: 'Registration is not completed', err });
+    return res.status(BAD_REQUEST).json({ message: 'Registration is not completed', err, reg: false });
   }
+});
+
+router.get('/activation/:id', async (req, res) => {
+  res.json({ params: req.params });
 });
 
 router.get('/checkToken', async (req, res) => {

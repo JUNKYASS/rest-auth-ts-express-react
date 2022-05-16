@@ -4,3 +4,4 @@ export const REG = '/api/auth/registration';
 
 // Errors
 export const LOGIN_FAILED = 'Login failed';
+export const REG_FAILED = 'Registration failed';

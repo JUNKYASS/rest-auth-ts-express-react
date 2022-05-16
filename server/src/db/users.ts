@@ -16,13 +16,13 @@ export const usersQueries = (client: Client) => {
     }
   };
 
-  const addUser = async (user: usersInitializer, callback?: (err: Error, result: QueryResult<any>) => void): Promise<QueryResult<any> | undefined> => {
+  const addUser = async (user: usersInitializer, callback?: (err: Error, result: QueryResult<users>) => void): Promise<QueryResult<users> | undefined> => {
     try {
-      const { login, password, email, is_admin, activation_link } = user;
+      const { login, password, email, is_admin, activation_id } = user;
 
-      const q = 'INSERT INTO users (login, password, email, is_admin, activation_link) VALUES ($1, $2, $3, $4, $5)';
+      const q = 'INSERT INTO users (login, password, email, is_admin, activation_id) VALUES ($1, $2, $3, $4, $5) RETURNING *';
 
-      return await db.query(q, [login, password, email, is_admin, activation_link], callback);
+      return await db.query(q, [login, password, email, is_admin, activation_id], callback);
     } catch (e) {
       logger.err(e);
     }
