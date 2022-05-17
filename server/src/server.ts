@@ -1,10 +1,13 @@
-import express, { Request, Response, NextFunction } from 'express';
+import express, { Request, Response, NextFunction, Router } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import logger from 'jet-logger';
 import cookieParser from 'cookie-parser';
 import helmet from 'helmet';
-import apiRouter from './routes/api';
 import dotenv from 'dotenv';
+
+import apiRouter from './routes/api';
+import { CustomError } from './utils/errors';
+
 dotenv.config();
 
 const app = express();
@@ -19,12 +22,16 @@ const PORT = process.env.PORT || 80;
 app.use('/api', apiRouter);
 
 // Error handling
-app.use((err: Error, _: Request, res: Response, __: NextFunction) => {
-  const status = StatusCodes.BAD_REQUEST;
-
+app.use((err: Error | CustomError, _: Request, res: Response, __: NextFunction) => {
   logger.err(err, true);
 
-  return res.status(status).json({ error: err.message, });
+  const status = err instanceof CustomError ? err.HttpStatus : StatusCodes.BAD_REQUEST;
+
+  return res.status(status).json({
+    message: err.message,
+    error: err,
+    success: false,
+  });
 });
 
 app.listen(PORT, () => {

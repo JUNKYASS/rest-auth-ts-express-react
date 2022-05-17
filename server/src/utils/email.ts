@@ -1,8 +1,10 @@
 import nodemailer from 'nodemailer';
+import SMTPTransport from 'nodemailer/lib/smtp-transport';
 import dotenv from 'dotenv';
+
 dotenv.config();
 
-const sendAccountActivationLink = async (toEmail: string, activation_link: string) => {
+const sendAccountActivationLink = async (toEmail: string, activation_link: string): Promise<any> => {
   const htmlLetter = (
     `
       <div>
@@ -12,17 +14,17 @@ const sendAccountActivationLink = async (toEmail: string, activation_link: strin
     `
   );
 
-  try {
-    const transporter = nodemailer.createTransport({
-      host: process.env.SMTP_HOST,
-      port: Number(process.env.SMTP_PORT),
-      secure: false,
-      auth: {
-        user: process.env.SMTP_USER,
-        pass: process.env.SMTP_PASS
-      }
-    });
+  const transporter = nodemailer.createTransport({
+    host: process.env.SMTP_HOST,
+    port: Number(process.env.SMTP_PORT),
+    secure: false,
+    auth: {
+      user: process.env.SMTP_USER,
+      pass: process.env.SMTP_PASS
+    }
+  });
 
+  return new Promise(async (resolve, reject) => {
     await transporter.sendMail({
       from: process.env.SMTP_HOST,
       to: toEmail,
@@ -30,13 +32,9 @@ const sendAccountActivationLink = async (toEmail: string, activation_link: strin
       text: '',
       html: htmlLetter
     }, (err, info) => {
-      if (err) throw new Error(err.message);
-
-      if (info) return { message: `We sent a confirmation to ${toEmail}, please check your inbox`, result: info };
+      err ? reject(err.message) : resolve({ message: `We sent a confirmation email to ${toEmail}, please check your inbox`, data: info, success: true });
     });
-  } catch (e) {
-    return { message: 'email is not sent', result: false, error: e };
-  }
+  });
 };
 
 export default {

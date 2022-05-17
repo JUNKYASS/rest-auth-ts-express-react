@@ -15,15 +15,15 @@ const sign = (data: JwtPayload): Promise<string> => { // Encrypt data and return
   });
 };
 
-const decode = (jwt: string): Promise<JwtPayload | string | undefined> => { // Decrypt JWT and extract client data
+const decode = (jwt: string): Promise<JwtPayload | string | undefined | any> => { // Decrypt JWT and extract client data
   return new Promise((res, rej) => {
     jsonwebtoken.verify(jwt, secret, (err, decoded) => {
-      return err ? rej({ error: errors.validation }) : res(decoded);
+      return err ? rej(errors.validation) : res(decoded);
     });
   });
 };
 
 export default {
   sign,
-  decode
+  decode,
 }

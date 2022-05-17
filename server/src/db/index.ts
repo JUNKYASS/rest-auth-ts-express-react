@@ -25,18 +25,12 @@ const query = async (text: string, params?: any[], callback?: (err: Error, resul
         if (result) resolve(result);
       });
     } catch (e) {
-      logger.err(e);
+
 
       reject(e);
     }
   });
 };
-
-// // Users queries
-// const { addUser, getUserByLoginOrEmail } = usersQueries(client);
-
-// // Auth_tokens queries
-// const { addAuthToken } = authTokensQueries(client);
 
 export default {
   ...usersQueries(client), // Users queries

@@ -45,7 +45,7 @@ const Login: React.FC<ILoginProps> = (props) => {
   }, []);
 
   const handleCheck = async () => {
-    const data = await fetch('/api/auth/checkToken', {
+    const data = await fetch('/api/auth/token/verify', {
       method: 'GET',
     });
   }
@@ -55,11 +55,11 @@ const Login: React.FC<ILoginProps> = (props) => {
 
     setError(undefined); // Clear error messages
 
-    if (!(password && login)) {
-      setError('Login and password must be specified');
+    // if (!(password && login)) {
+    //   setError('Login and password must be specified');
 
-      return;
-    }
+    //   return;
+    // }
 
     const options = {
       method: 'POST',
