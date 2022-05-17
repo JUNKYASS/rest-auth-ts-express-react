@@ -16,6 +16,30 @@ export const usersQueries = (client: Client) => {
     }
   };
 
+  const getUserByActivationId = async (activation_id: string): Promise<users | undefined> => {
+    try {
+      const q = 'SELECT * FROM users WHERE activation_id = $1';
+
+      const result = await client.query(q, [activation_id]);
+
+      return result.rows[0];
+    } catch (e) {
+      logger.err(e);
+    }
+  };
+
+  const activateUser = async (user_id: string): Promise<users | undefined> => {
+    try {
+      const q = 'UPDATE users SET is_activated = true WHERE id = $1 RETURNING *';
+
+      const result = await client.query(q, [user_id]);
+
+      return result.rows[0];
+    } catch (e) {
+      logger.err(e);
+    }
+  };
+
   const addUser = async (user: usersInitializer, callback?: (err: Error, result: QueryResult<users>) => void): Promise<QueryResult<users> | undefined> => {
     try {
       const { login, password, email, is_admin, activation_id } = user;
@@ -30,6 +54,8 @@ export const usersQueries = (client: Client) => {
 
   return {
     getUserByLoginOrEmail,
+    getUserByActivationId,
+    activateUser,
     addUser
   }
 };

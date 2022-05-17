@@ -32,15 +32,14 @@ const query = async (text: string, params?: any[], callback?: (err: Error, resul
   });
 };
 
-// Users queries
-const { addUser, getUserByLoginOrEmail } = usersQueries(client);
+// // Users queries
+// const { addUser, getUserByLoginOrEmail } = usersQueries(client);
 
-// Auth_tokens queries
-const { addAuthToken } = authTokensQueries(client);
+// // Auth_tokens queries
+// const { addAuthToken } = authTokensQueries(client);
 
 export default {
+  ...usersQueries(client), // Users queries
+  ...authTokensQueries(client), // Auth_tokens queries
   query,
-  getUserByLoginOrEmail,
-  addUser,
-  addAuthToken,
 };

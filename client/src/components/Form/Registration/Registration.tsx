@@ -69,7 +69,7 @@ const Registration: React.FC<IRegistrationProps> = (props) => {
     const data = await fetch(REG, options);
     const result = await data.json();
 
-    if (result && !!result.auth) {
+    if (result && !!result.success) {
       console.log(result);
     } else {
       setError(result.message || REG_FAILED);

@@ -73,7 +73,7 @@ const Login: React.FC<ILoginProps> = (props) => {
     const data = await fetch(LOGIN, options);
     const result = await data.json();
 
-    if (result && !!result.auth) {
+    if (result && !!result.success) {
       console.log(result);
     } else {
       setError(result.message || LOGIN_FAILED);
