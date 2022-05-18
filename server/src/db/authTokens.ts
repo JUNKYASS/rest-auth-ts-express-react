@@ -1,6 +1,7 @@
 import logger from 'jet-logger';
 import { Client, QueryResult } from 'pg';
-import { users, usersInitializer, auth_tokens, auth_tokensInitializer } from '../models';
+
+import { auth_tokens, auth_tokensInitializer } from '../models';
 import db from '.';
 
 export const authTokensQueries = (client: Client) => {
@@ -15,9 +16,17 @@ export const authTokensQueries = (client: Client) => {
     } catch (e) {
       logger.err(e);
     }
-  }
+  };
+
+  const getAuthToken = async (token: string): Promise<auth_tokens> => {
+    const q = "SELECT * FROM auth_tokens WHERE token = $1";
+    const result = await db.query(q, [token]).catch(e => { logger.err(e); });
+
+    return result ? result.rows[0] : undefined;
+  };
 
   return {
-    addAuthToken
+    addAuthToken,
+    getAuthToken,
   };
 };

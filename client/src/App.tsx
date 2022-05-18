@@ -1,24 +1,19 @@
-import React, { useEffect } from 'react';
-import { useRoutes } from 'react-router';
+import React from 'react';
 
 import './App.css';
 
-import Homepage from './pages/homepage/Homepage';
-import Registration from './pages/registrartion/Registration';
-import Users from './pages/users/Users';
-import Profile from './pages/profile/Profile';
-import Admin from './pages/admin/Admin';
+import AppRoutes from './pages/AppRoutes';
+import Layout from './templates/Layout/Layout';
+import AuthProvider from './store/Auth/AuthProvider';
 
 const App: React.FC = () => {
-  const element = useRoutes([
-    { path: '/', element: <Homepage /> },
-    { path: '/registration', element: <Registration /> },
-    { path: '/users', element: <Users /> },
-    { path: '/profile', element: <Profile /> },
-    { path: '/admin', element: <Admin /> },
-  ]);
-
-  return element;
-}
+  return (
+    <AuthProvider>
+      <Layout>
+        <AppRoutes />
+      </Layout>
+    </AuthProvider>
+  )
+};
 
 export default App;

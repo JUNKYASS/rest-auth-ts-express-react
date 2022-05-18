@@ -7,7 +7,7 @@ export class CustomError extends Error {
     super(msg);
     this.HttpStatus = httpStatus;
   }
-}
+};
 
 export class ParamMissingError extends CustomError {
   public static readonly Msg = 'One or more of the required parameters was missing.';
@@ -16,7 +16,7 @@ export class ParamMissingError extends CustomError {
   constructor() {
     super(ParamMissingError.Msg, ParamMissingError.HttpStatus);
   }
-}
+};
 
 export class UserNotFoundError extends CustomError {
   public static readonly Msg = 'A user with the given params does not exists';
@@ -25,7 +25,7 @@ export class UserNotFoundError extends CustomError {
   constructor() {
     super(UserNotFoundError.Msg, UserNotFoundError.HttpStatus);
   }
-}
+};
 
 export class UnauthorizedError extends CustomError {
   public static readonly Msg = 'Login failed';
@@ -34,7 +34,7 @@ export class UnauthorizedError extends CustomError {
   constructor() {
     super(UnauthorizedError.Msg, UnauthorizedError.HttpStatus);
   }
-}
+};
 
 
 export class RegistrationError extends CustomError {
@@ -44,4 +44,4 @@ export class RegistrationError extends CustomError {
   constructor() {
     super(RegistrationError.Msg, RegistrationError.HttpStatus);
   }
-}
+};

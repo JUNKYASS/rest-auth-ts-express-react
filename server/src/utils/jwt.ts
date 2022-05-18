@@ -1,10 +1,11 @@
 import jsonwebtoken, { JwtPayload } from 'jsonwebtoken';
 import { v4 as uuid } from 'uuid';
 import dotenv from 'dotenv';
+
 dotenv.config();
 
-const errors = { validation: 'JSON-web-token validation failed', };
-const options = { expiresIn: process.env.COOKIE_EXP, };
+const errors = { validation: 'JWT validation failed', };
+const options = { expiresIn: 60000, };
 const secret = process.env.JWT_SECRET || uuid();
 
 const sign = (data: JwtPayload): Promise<string> => { // Encrypt data and return jwt
@@ -26,4 +27,4 @@ const decode = (jwt: string): Promise<JwtPayload | string | undefined | any> => 
 export default {
   sign,
   decode,
-}
+};

@@ -28,7 +28,7 @@ app.use((err: Error | CustomError, _: Request, res: Response, __: NextFunction) 
   const status = err instanceof CustomError ? err.HttpStatus : StatusCodes.BAD_REQUEST;
 
   return res.status(status).json({
-    message: err.message,
+    message: err.message || 'Unexpected error, please, try again',
     error: err,
     success: false,
   });
@@ -36,4 +36,4 @@ app.use((err: Error | CustomError, _: Request, res: Response, __: NextFunction) 
 
 app.listen(PORT, () => {
   logger.info(`Server started on port ${PORT}`)
-})
+});

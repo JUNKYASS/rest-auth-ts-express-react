@@ -1,5 +1,6 @@
 import { body } from 'express-validator';
 import logger from 'jet-logger';
+
 import db from '../db';
 
 export const registrationValidators = [
@@ -20,7 +21,7 @@ export const registrationValidators = [
     }
 
     return true;
-  })
+  }),
 ];
 
 export const loginValidators = [

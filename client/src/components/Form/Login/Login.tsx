@@ -1,7 +1,10 @@
 import React, { FormEvent, useEffect, useState } from 'react';
+import { Link } from "react-router-dom";
+
 import styles from './Login.module.scss';
 
 import { LOGIN, LOGIN_FAILED } from '../../../constants/api';
+import { REGISTRATION_ROUTE } from '../../../constants/routes';
 
 interface ILoginProps {
   error?: string | string[],
@@ -14,7 +17,6 @@ const Login: React.FC<ILoginProps> = (props) => {
   const [password, setPassword] = useState<string>('');
   const [login, setLogin] = useState<string>('');
   const [auth, setAuth] = useState<boolean>(false);
-
 
   useEffect(() => {
     const newUser = {
@@ -101,12 +103,13 @@ const Login: React.FC<ILoginProps> = (props) => {
         />
 
         <button type="submit">Log in</button>
+        <p>No account? <Link to={REGISTRATION_ROUTE}>Register new one</Link></p>
       </form>
       {error && (
         <p className={styles.error}>{error}</p>
       )}
 
-      <button onClick={handleCheck}>Check</button>
+      {/* <button onClick={handleCheck}>Check</button> */}
     </div>
   );
 }

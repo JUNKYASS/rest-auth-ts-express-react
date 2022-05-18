@@ -1,5 +1,6 @@
 import logger from 'jet-logger';
 import { Client, QueryResult } from 'pg';
+
 import { users, usersInitializer } from '../models';
 import db from '.';
 
@@ -55,5 +56,5 @@ export const usersQueries = (client: Client) => {
     getUserByActivationId,
     activateUser,
     addUser
-  }
+  };
 };

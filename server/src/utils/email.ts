@@ -1,5 +1,4 @@
 import nodemailer from 'nodemailer';
-import SMTPTransport from 'nodemailer/lib/smtp-transport';
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -39,4 +38,4 @@ const sendAccountActivationLink = async (toEmail: string, activation_link: strin
 
 export default {
   sendAccountActivationLink
-}
+};

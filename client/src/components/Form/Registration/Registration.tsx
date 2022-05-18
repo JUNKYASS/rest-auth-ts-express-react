@@ -1,7 +1,10 @@
 import React, { FormEvent, useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+
 import styles from './Registration.module.scss';
 
 import { REG, REG_FAILED } from '../../../constants/api';
+import { HOMEPAGE_ROUTE } from '../../../constants/routes';
 
 interface IRegistrationProps {
   error?: string | string[],
@@ -113,6 +116,7 @@ const Registration: React.FC<IRegistrationProps> = (props) => {
         />
 
         <button type="submit">Reg</button>
+        <p>Have an account? <Link to={HOMEPAGE_ROUTE}>Log in</Link></p>
       </form>
       {error && (
         <p className={styles.error}>{error}</p>

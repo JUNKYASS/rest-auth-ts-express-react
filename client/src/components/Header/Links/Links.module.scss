@@ -1,0 +1,7 @@
+.root {
+  .link {
+    &:not(:first-child) {
+      margin-left: 15px;
+    }
+  }
+}

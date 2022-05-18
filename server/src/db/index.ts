@@ -1,8 +1,10 @@
 import logger from 'jet-logger';
 import { Client, QueryResult } from 'pg';
 import dotenv from 'dotenv';
+
 import { usersQueries } from './users';
 import { authTokensQueries } from './authTokens';
+
 dotenv.config();
 
 const client = new Client(process.env.DB_CONN_STRING);
