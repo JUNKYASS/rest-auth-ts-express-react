@@ -36,7 +36,7 @@ export const authTokensQueries = (client: Client) => {
     } catch (e) {
       logger.err(e);
     }
-  }
+  };
 
   return {
     addAuthToken,

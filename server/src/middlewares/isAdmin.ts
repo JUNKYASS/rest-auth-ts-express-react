@@ -5,7 +5,6 @@ import jwtUtil from '../utils/jwt';
 import { cookieProps } from '../utils/cookie';
 import { CustomError } from '../utils/errors';
 
-// Constants
 const { UNAUTHORIZED } = StatusCodes;
 const jwtNotPresentErr = 'JWT not present in signed cookie.';
 

@@ -26,7 +26,6 @@ const main = async () => {
     }
   });
 
-  // Checks for --custom and if it has a value
   const loginIndex = process.argv.indexOf('--login');
   const emailIndex = process.argv.indexOf('--email');
   const passwordIndex = process.argv.indexOf('--password');
@@ -50,14 +49,13 @@ const main = async () => {
 
   const hashedPass = await bcrypt.hash(passwordValue, 3);
   const activation_id = uuid();
-  const user = await db.query('INSERT INTO users (login, password, email, is_admin, is_actiivated, activation_id) VALUES ($1, $2, $3, $4, $5) RETURNING *', [loginValue, hashedPass, emailValue, true, true, activation_id])
-  // const user = await db.addUser({ login: loginValue, password: hashedPass.toString(), email: emailValue, is_admin: true, activation_id });
+  const user = await db.query('INSERT INTO users (login, password, email, is_admin, is_activated, activation_id) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *', [loginValue, hashedPass, emailValue, true, true, activation_id]).catch(e => { console.error(e); process.exit(1); })
 
   if (user) {
     console.log('Registration successful: User have been added');
 
     process.exit(1);
   }
-}
+};
 
 main();
