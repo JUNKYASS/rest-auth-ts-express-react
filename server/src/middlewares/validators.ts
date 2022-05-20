@@ -6,7 +6,6 @@ import db from '../db';
 export const registrationValidators = [
   body('email', 'Use correct email').isEmail().custom(async (value, { req }) => {
     try {
-      // const candidate = await db.query('SELECT * FROM users WHERE login = $1 OR email = $2', [req.body.login, req.body.email]);
       const candidate = await db.getUserByLoginOrEmail(req.body.login, req.body.email);
       if (candidate) return Promise.reject('User with such login or email already exists');
     } catch (e) {

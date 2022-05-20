@@ -19,12 +19,16 @@ export const linksData: ILinksData[] = [
     auth: true,
     links: [
       {
+        to: HOMEPAGE_ROUTE,
+        text: 'Homepage',
+      },
+      {
         to: PROFILE_ROUTE,
         text: 'Profile',
       },
       {
         to: USERS_ROUTE,
-        text: 'Users list',
+        text: 'Users',
         adminOnly: true
       }
     ]

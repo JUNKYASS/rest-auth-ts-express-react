@@ -5,6 +5,31 @@ import { users, usersInitializer } from '../models';
 import db from '.';
 
 export const usersQueries = (client: Client) => {
+  const getAllUsers = async (): Promise<QueryResult<users | users[]> | undefined> => {
+    try {
+      const q = 'SELECT * FROM users ORDER BY id ASC';
+      const result = await client.query(q);
+
+      return result;
+    } catch (e) {
+      logger.err(e);
+    }
+  };
+
+  const getUsersWithOffset = async (offset: number, count: number): Promise<{ total?: number } & QueryResult<users | users[]> | undefined> => {
+    try {
+      const q = 'SELECT * FROM users ORDER BY id ASC OFFSET $1 LIMIT $2';
+      const result: { total?: number } & QueryResult<any> = await client.query(q, [offset, count]);
+      const usersCount = await getAllUsers();
+
+      if (usersCount) result.total = usersCount.rowCount;
+
+      return result;
+    } catch (e) {
+      logger.err(e);
+    }
+  };
+
   const getUserByLoginOrEmail = async (login: string, email?: string): Promise<users | undefined> => {
     try {
       const q = 'SELECT * FROM users WHERE login = $1 OR email = $2';
@@ -52,6 +77,8 @@ export const usersQueries = (client: Client) => {
   };
 
   return {
+    getAllUsers,
+    getUsersWithOffset,
     getUserByLoginOrEmail,
     getUserByActivationId,
     activateUser,

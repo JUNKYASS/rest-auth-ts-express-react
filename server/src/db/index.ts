@@ -27,8 +27,6 @@ const query = async (text: string, params?: any[], callback?: (err: Error, resul
         if (result) resolve(result);
       });
     } catch (e) {
-
-
       reject(e);
     }
   });

@@ -5,7 +5,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const errors = { validation: 'JWT validation failed', };
-const options = { expiresIn: 60000, };
+const options = { expiresIn: process.env.COOKIE_EXP, };
 const secret = process.env.JWT_SECRET || uuid();
 
 const sign = (data: JwtPayload): Promise<string> => { // Encrypt data and return jwt

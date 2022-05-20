@@ -1,3 +1,15 @@
 * {
   /* font-family: 'Courier new'; */
 }
+
+body {
+  padding: 0 10px;
+}
+
+input {
+  border: 1px solid #bdbdbd !important;
+}
+
+p {
+  margin-top: 5px;
+}

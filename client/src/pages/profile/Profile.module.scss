@@ -1,0 +1,25 @@
+.root {
+  .info {
+    width: 100%;
+    max-width: 215px;
+
+    .option {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+
+      &:not(:first-child) {
+        margin-top: 10px;
+      }
+
+      .value {
+        font-size: 12px;
+      }
+    }
+  }
+
+  button {
+    margin-top: 20px;
+  }
+}

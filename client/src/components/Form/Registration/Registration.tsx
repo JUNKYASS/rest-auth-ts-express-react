@@ -1,10 +1,12 @@
-import React, { FormEvent, useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { FormEvent, useContext, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 
 import styles from './Registration.module.scss';
 
 import { REG, REG_FAILED } from '../../../constants/api';
-import { HOMEPAGE_ROUTE } from '../../../constants/routes';
+import AuthContext from '../../../store/Auth/AuthContext';
+
+import { HOMEPAGE_ROUTE, PROFILE_ROUTE } from '../../../constants/routes';
 
 interface IRegistrationProps {
   error?: string | string[],
@@ -15,33 +17,15 @@ const Registration: React.FC<IRegistrationProps> = (props) => {
   const receivedError = props.error;
   const isAdmin = props.isAdmin || false;
 
+  const { setUser } = useContext(AuthContext);
+  const navigate = useNavigate();
+
+  const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | string[] | undefined>(receivedError);
   const [password, setPassword] = useState<string>('');
   const [passwordConfirm, setPasswordConfirm] = useState<string>('');
   const [email, setEmail] = useState<string>('');
   const [login, setLogin] = useState<string>('');
-  const [auth, setAuth] = useState<boolean>(false);
-
-
-  useEffect(() => {
-
-    // fetch('/api/auth/registration', {
-    //   method: 'POST',
-    //   headers: {
-    //     'Accept': 'application/json',
-    //     'Content-type': 'application/json',
-    //   },
-    //   body: JSON.stringify(newUser)
-    // })
-    //   .then(res => res.json())
-    //   .then(data => console.log(data));
-  }, []);
-
-  // const handleCheck = async () => {
-  //   const data = await fetch('/api/auth/checkToken', {
-  //     method: 'GET',
-  //   });
-  // }
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -60,6 +44,8 @@ const Registration: React.FC<IRegistrationProps> = (props) => {
       return;
     }
 
+    setLoading(true);
+
     const options = {
       method: 'POST',
       headers: {
@@ -73,10 +59,13 @@ const Registration: React.FC<IRegistrationProps> = (props) => {
     const result = await data.json();
 
     if (result && !!result.success) {
-      console.log(result);
+      setUser(result.data);
+      navigate(PROFILE_ROUTE);
     } else {
       setError(result.message || REG_FAILED);
     }
+
+    setLoading(false);
   };
 
   return (
@@ -115,14 +104,11 @@ const Registration: React.FC<IRegistrationProps> = (props) => {
           placeholder="Password confirm"
         />
 
-        <button type="submit">Reg</button>
+        {!loading ? <button type="submit">Reg</button> : 'Loading...'}
         <p>Have an account? <Link to={HOMEPAGE_ROUTE}>Log in</Link></p>
       </form>
-      {error && (
-        <p className={styles.error}>{error}</p>
-      )}
 
-      {/* <button onClick={handleCheck}>Check</button> */}
+      {error && <p className={styles.error}>{error}</p>}
     </div>
   );
 }

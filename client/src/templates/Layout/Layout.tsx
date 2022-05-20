@@ -18,7 +18,7 @@ const Layout: React.FC<ILayoutProps> = props => {
   const { setUser } = useContext(AuthContext);
 
   useEffect(() => {
-    decodeAuthToken() // Check if user authorized and get user's data
+    decodeAuthToken() // Check if user authorized then get user's data
       .then(data => {
         if (data) setUser(data);
       })
@@ -33,6 +33,6 @@ const Layout: React.FC<ILayoutProps> = props => {
       </div>
     </div>
   )
-}
+};
 
-export default Layout
+export default Layout;

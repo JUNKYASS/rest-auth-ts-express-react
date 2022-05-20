@@ -9,7 +9,7 @@ dotenv.config();
 
 const { BAD_REQUEST } = StatusCodes;
 
-const activationController = async (req: Request, res: Response, next: NextFunction) => {
+const activationController = async (req: Request, res: Response, _: NextFunction) => {
   const activation_id = req.params.id;
   const user = await db.getUserByActivationId(activation_id);
   if (!user) throw new UserNotFoundError();

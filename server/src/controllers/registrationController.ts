@@ -16,7 +16,7 @@ dotenv.config();
 
 const { OK, CONFLICT } = StatusCodes;
 
-const registrationController = async (req: Request, res: Response, next: NextFunction) => {
+const registrationController = async (req: Request, res: Response, _: NextFunction) => {
   const { login, password, email, is_admin } = req.body;
   if (!(login && password && email && typeof is_admin === 'boolean')) throw new ParamMissingError();
 
@@ -31,6 +31,7 @@ const registrationController = async (req: Request, res: Response, next: NextFun
   delete (user as any).password; // Because we'll save this data to JWT
   const jwt = await jwtUtil.sign({ ...user }); // Create jwt
   const token = await db.addAuthToken({ token: jwt, user_id: user.id }); // Save auth token to db
+
   if (!token) throw new RegistrationError();
   res.cookie(cookieProps.key, jwt, cookieProps.options); // Add jwt to cookie
 
@@ -41,7 +42,7 @@ const registrationController = async (req: Request, res: Response, next: NextFun
     throw new RegistrationError();
   });
 
-  return res.status(OK).json({ message: `Registration successful! ${activation.message}`, activation, success: true });
+  return res.status(OK).json({ message: `Registration successful! ${activation.message}`, activation, data: user, success: true });
 };
 
 export default registrationController;

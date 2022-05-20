@@ -11,7 +11,7 @@ dotenv.config();
 
 const { OK, UNAUTHORIZED } = StatusCodes;
 
-const tokenVerifyController = async (req: Request, res: Response, next: NextFunction) => {
+const tokenVerifyController = async (req: Request, res: Response, _: NextFunction) => {
   const token = req.signedCookies[cookieProps.key];
   if (!token) return res.status(OK).json({ message: 'Token doesn\'t exist', success: false });
 
@@ -21,7 +21,11 @@ const tokenVerifyController = async (req: Request, res: Response, next: NextFunc
   const decodedData = await jwtUtil.decode(savedToken.token);
   if (!decodedData || decodedData.error) throw new CustomError('Token is not valid', UNAUTHORIZED);
 
-  return res.status(OK).json({ message: 'Token is valid', success: true, data: decodedData });
+  const user = await db.getUserByLoginOrEmail(decodedData.login);
+  delete (user as any).password;
+  delete (user as any).activation_id;
+
+  return res.status(OK).json({ message: 'Token is valid', success: true, data: user });
 };
 
 export default tokenVerifyController;

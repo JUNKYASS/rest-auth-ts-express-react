@@ -1,67 +1,39 @@
-import React, { FormEvent, useEffect, useState } from 'react';
-import { Link } from "react-router-dom";
+import React, { FormEvent, useContext, useState } from 'react';
+import { Link, useNavigate } from "react-router-dom";
 
 import styles from './Login.module.scss';
 
 import { LOGIN, LOGIN_FAILED } from '../../../constants/api';
-import { REGISTRATION_ROUTE } from '../../../constants/routes';
+import { PROFILE_ROUTE, REGISTRATION_ROUTE } from '../../../constants/routes';
+import AuthContext from '../../../store/Auth/AuthContext';
+import { IUserResponse } from '../../../types/commonTypes';
 
 interface ILoginProps {
   error?: string | string[],
+  adminAuth?: boolean,
 }
 
 const Login: React.FC<ILoginProps> = (props) => {
   const receivedError = props.error;
+  const adminAuth = props.adminAuth;
+
+  const { setUser } = useContext(AuthContext);
+  const navigate = useNavigate();
 
   const [error, setError] = useState<string | string[] | undefined>(receivedError);
   const [password, setPassword] = useState<string>('');
   const [login, setLogin] = useState<string>('');
-  const [auth, setAuth] = useState<boolean>(false);
-
-  useEffect(() => {
-    const newUser = {
-      login: 'son1',
-      password: 'pass123',
-      password_confirm: 'pass123',
-      email: 'hhh1@gmail.com',
-      is_admin: false
-    };
-
-    const existingUser = {
-      login: 'son1',
-      password: 'pass123',
-    }
-
-
-
-    // fetch('/api/auth/registration', {
-    //   method: 'POST',
-    //   headers: {
-    //     'Accept': 'application/json',
-    //     'Content-type': 'application/json',
-    //   },
-    //   body: JSON.stringify(newUser)
-    // })
-    //   .then(res => res.json())
-    //   .then(data => console.log(data));
-  }, []);
-
-  const handleCheck = async () => {
-    const data = await fetch('/api/auth/token/verify', {
-      method: 'GET',
-    });
-  }
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     setError(undefined); // Clear error messages
 
-    // if (!(password && login)) {
-    //   setError('Login and password must be specified');
+    if (!(password && login)) {
+      setError('Login and password must be specified');
 
-    //   return;
-    // }
+      return;
+    }
 
     const options = {
       method: 'POST',
@@ -69,14 +41,15 @@ const Login: React.FC<ILoginProps> = (props) => {
         'Accept': 'application/json',
         'Content-type': 'application/json',
       },
-      body: JSON.stringify({ login, password })
+      body: JSON.stringify({ login, password, is_admin: adminAuth })
     };
 
     const data = await fetch(LOGIN, options);
-    const result = await data.json();
+    const result: IUserResponse = await data.json();
 
-    if (result && !!result.success) {
-      console.log(result);
+    if (result && !!result.success && result.data) {
+      setUser(result.data);
+      navigate(PROFILE_ROUTE);
     } else {
       setError(result.message || LOGIN_FAILED);
     }
@@ -91,7 +64,7 @@ const Login: React.FC<ILoginProps> = (props) => {
           value={login}
           onChange={(e) => setLogin(e.target.value)}
           autoComplete="off"
-          placeholder="Login or email"
+          placeholder={!adminAuth ? "Login or email" : "email"}
         />
         <input
           type="password"
@@ -103,7 +76,7 @@ const Login: React.FC<ILoginProps> = (props) => {
         />
 
         <button type="submit">Log in</button>
-        <p>No account? <Link to={REGISTRATION_ROUTE}>Register new one</Link></p>
+        {!adminAuth && <p>No account? <Link to={REGISTRATION_ROUTE}>Register new one</Link></p>}
       </form>
       {error && (
         <p className={styles.error}>{error}</p>

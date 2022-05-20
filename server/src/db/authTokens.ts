@@ -18,15 +18,29 @@ export const authTokensQueries = (client: Client) => {
     }
   };
 
-  const getAuthToken = async (token: string): Promise<auth_tokens> => {
-    const q = "SELECT * FROM auth_tokens WHERE token = $1";
-    const result = await db.query(q, [token]).catch(e => { logger.err(e); });
+  const getAuthToken = async (token: string): Promise<auth_tokens | undefined> => {
+    try {
+      const q = "SELECT * FROM auth_tokens WHERE token = $1";
+      const result = await db.query(q, [token]).catch(e => { logger.err(e); });
 
-    return result ? result.rows[0] : undefined;
+      return result ? result.rows[0] : undefined;
+    } catch (e) {
+      logger.err(e);
+    }
   };
+
+  const deleteAuthToken = async (token: string) => {
+    try {
+      const q = "DELETE FROM auth_tokens WHERE token = $1";
+      return await db.query(q, [token]).catch(e => { logger.err(e); });
+    } catch (e) {
+      logger.err(e);
+    }
+  }
 
   return {
     addAuthToken,
     getAuthToken,
+    deleteAuthToken,
   };
 };

@@ -1,3 +1,4 @@
+import { Request, Response, NextFunction } from 'express';
 import HttpStatusCodes from 'http-status-codes';
 
 export class CustomError extends Error {
@@ -44,4 +45,9 @@ export class RegistrationError extends CustomError {
   constructor() {
     super(RegistrationError.Msg, RegistrationError.HttpStatus);
   }
+};
+
+// Wrapper for the error handling
+export const use = (fn: (req: Request, res: Response, next: NextFunction) => Promise<Response<any, Record<string, any>>> | any) => {
+  return (req: Request, res: Response, next: NextFunction) => Promise.resolve(fn(req, res, next)).catch(next);
 };

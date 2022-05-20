@@ -17,7 +17,7 @@ export interface IUser {
   is_activated?: boolean,
 }
 
-export interface IVerifyTokenResponse {
+export interface IUserResponse {
   message?: string,
   success?: boolean,
   data?: IUser
