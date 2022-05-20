@@ -2,16 +2,16 @@
 
 ## Stack
 
-#### **Frontend**: React.js, Typescript
+#### __Frontend__: React.js, Typescript
 
-#### **Backend**: Node.js, Express.js, PostgreSQL, Typescript
+#### __Backend__: Node.js, Express.js, PostgreSQL, Typescript
 
 <br>
 
 ## Запуск проекта
 1. __Скачиваем проект и установливаем зависимости__ <br>
   1.1. _git clone https://github.com/JUNKYASS/rest-auth-ts-express-react.git_<br>
-  1.2. Перейти в дирректорию проекта
+  1.2. Перейти в дирректорию проекта<br>
   1.3. перейти в папку с бекенд частью: _cd server_<br>
   1.4. npm i<br>
   1.5. Перейти в папку с клиентской частью: _cd ../client_<br>
