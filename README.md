@@ -1,7 +1,6 @@
 # Rest API application
 
 ## Stack
-___
 
 #### **Frontend**: React.js, Typescript
 
@@ -10,7 +9,6 @@ ___
 <br>
 
 ## Запуск проекта
-___
 1. __Скачиваем проект и установливаем зависимости__ <br>
   1.1. _git clone https://github.com/JUNKYASS/rest-auth-ts-express-react.git_<br>
   1.2. Перейти в дирректорию проекта
@@ -37,8 +35,6 @@ ___
 <br>
 
 ## Администратор
-
-___
 
 ### __Регистрация администратора__
 
